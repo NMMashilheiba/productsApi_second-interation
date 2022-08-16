@@ -19,8 +19,9 @@ function findAll() {
 
 function findById(id) {
   return new Promise((resolve, reject) => {
-    resolve(products);
+    const product = products.findProductById(client, id);
+    resolve(product);
   });
 }
 
-module.exports = { findAll };
+module.exports = { findAll, findById };

@@ -5,7 +5,7 @@ async function listAll(
   var res = [];
   const cursor = client
     .db("nodeapi")
-    .collection("productSalesRecord")
+    .collection("productsSells")
     .find({})
     .limit(maxNoOfResults);
 
@@ -16,16 +16,23 @@ async function listAll(
     console.log(`List of ${maxNoOfResults} products`);
     console.log(docs);
     return docs;
-    // results.forEach((result, i) => {
-    //   console.log();
-    //   console.log(`${i + 1}. name: ${result.name}`);
-    //   console.log(` _id: ${result._id}`);
-    //   console.log(` quantity: ${result.quantity}`);
-    //   console.log(` amount: ${result.amount}`);
-    // });
   } else {
     console.log(`No listing found `);
   }
 }
 
-module.exports = { listAll };
+async function findProductById(client, id) {
+  const result = await client
+    .db("nodeapi")
+    .collection("productsSells")
+    .findOne({ _id: parseInt(id) });
+  console.log(typeof parseInt(id));
+
+  if (result) {
+    return result;
+  } else {
+    console.log(`No product with the id ${id}`);
+  }
+}
+
+module.exports = { listAll, findProductById };
