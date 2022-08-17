@@ -29,4 +29,19 @@ async function getProduct(req, res, id) {
   }
 }
 
-module.exports = { getProducts, getProduct };
+// @desc Create a product
+// @routes POST /api/products/create
+async function createProduct(req, res) {
+  try {
+    const product = {
+      productName: "Samsung Galaxy A50",
+    };
+    const newProduct = await Product.create(product);
+    res.writeHead(201, { "Content-type": "application/json" });
+    res.end(JSON.stringify(newProduct));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = { getProducts, getProduct, createProduct };

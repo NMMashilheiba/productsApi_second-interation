@@ -24,4 +24,12 @@ function findById(id) {
   });
 }
 
-module.exports = { findAll, findById };
+function create(product) {
+  //   console.log(product);
+  return new Promise((resolve, reject) => {
+    const newProduct = products.createProduct(client, product);
+    resolve(newProduct);
+  });
+}
+
+module.exports = { findAll, findById, create };

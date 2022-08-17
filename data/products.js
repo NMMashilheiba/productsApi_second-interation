@@ -35,4 +35,39 @@ async function findProductById(client, id) {
   }
 }
 
-module.exports = { listAll, findProductById };
+async function getNextSequenceValue(client, sequenceName) {
+  var sequenceDocument = await client
+    .db("nodeapi")
+    .collection("counters")
+    .updateOne(
+      {
+        _id: sequenceName,
+      },
+      { $inc: { sequence_value: 1 } }
+    );
+  //   console.log(sequenceDocument);
+  return sequenceDocument.sequence_value;
+}
+
+async function createProduct(client, product) {
+  await getNextSequenceValue(client, "productid");
+  //   console.log(typeof product);
+  const id = await client
+    .db("nodeapi")
+    .collection("counters")
+    .findOne({ _id: "productid" });
+  const newProduct = await client
+    .db("nodeapi")
+    .collection("productsSells")
+    .insertOne({
+      _id: id.sequence_value,
+      productName: product.productName,
+    });
+  const result = {
+    _id: newProduct.insertedId,
+    productName: product.productName,
+  };
+  return result;
+}
+
+module.exports = { listAll, findProductById, createProduct };
