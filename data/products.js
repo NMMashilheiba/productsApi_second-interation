@@ -94,6 +94,8 @@ async function updateProductById(client, productId, productData) {
   const resultData = {
     _id: parseInt(productId),
     productName: productData.productName,
+    productQuantity: productData.productQuantity,
+    totalAmount: productData.totalAmount,
   };
   //   console.log(
   //     `${updatedProduct.matchedCount} documents matched the query criteria`

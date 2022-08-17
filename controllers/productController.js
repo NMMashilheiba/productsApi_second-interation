@@ -64,10 +64,12 @@ async function updateProduct(req, res, id) {
     } else {
       const body = await getPostData(req);
 
-      const { productName } = JSON.parse(body);
+      const { productName, productQuantity, totalAmount } = JSON.parse(body);
 
       const productData = {
         productName,
+        productQuantity,
+        totalAmount,
       };
 
       const updatedProduct = await Product.update(id, productData);
