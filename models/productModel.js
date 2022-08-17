@@ -1,7 +1,7 @@
 require("dotenv").config();
 const products = require("../data/products");
 const { MongoClient } = require("mongodb");
-const uri = `mongodb+srv://mashil:${process.env.MONGO_PASS}@nodeapi.a1u6ibd.mongodb.net/${process.env.MONGO_CLUSTER}?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@nodeapi.a1u6ibd.mongodb.net/${process.env.MONGO_CLUSTER}?retryWrites=true&w=majority`;
 // console.log(uri);
 const client = new MongoClient(uri);
 
