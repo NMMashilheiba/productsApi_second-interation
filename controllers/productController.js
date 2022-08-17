@@ -36,10 +36,12 @@ async function createProduct(req, res) {
   try {
     const body = await getPostData(req);
 
-    const { productName } = JSON.parse(body);
+    const { productName, productQuantity, totalAmount } = JSON.parse(body);
 
     const product = {
       productName,
+      productQuantity,
+      totalAmount,
     };
 
     const newProduct = await Product.create(product);

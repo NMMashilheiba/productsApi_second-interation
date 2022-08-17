@@ -1,3 +1,10 @@
+var today = new Date();
+var date =
+  today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+// var time =
+//   today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+var dateTime = date;
+
 async function listAll(
   client,
   { maxNoOfResults = Number.MAX_SAFE_INTEGER } = {}
@@ -46,13 +53,13 @@ async function getNextSequenceValue(client, sequenceName) {
       { $inc: { sequence_value: 1 } }
     );
   //   console.log(sequenceDocument);
-  return sequenceDocument.sequence_value;
+  //   return sequenceDocument.sequence_value;
 }
 
 async function createProduct(client, product) {
   await getNextSequenceValue(client, "productid");
-  //   console.log(typeof product);
-  const id = await client
+
+  const newId = await client
     .db("nodeapi")
     .collection("counters")
     .findOne({ _id: "productid" });
@@ -60,12 +67,18 @@ async function createProduct(client, product) {
     .db("nodeapi")
     .collection("productsSells")
     .insertOne({
-      _id: id.sequence_value,
+      _id: newId.sequence_value,
       productName: product.productName,
+      productQuantity: product.productQuantity,
+      totalAmount: product.totalAmount,
+      date: dateTime,
     });
   const result = {
     _id: newProduct.insertedId,
     productName: product.productName,
+    productQuantity: product.productQuantity,
+    totalAmount: product.totalAmount,
+    date: dateTime,
   };
   //   console.log(typeof newProduct.insertedId);
   return result;

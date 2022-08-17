@@ -12,7 +12,7 @@ try {
 
 function findAll() {
   return new Promise((resolve, reject) => {
-    const results = products.listAll(client, { maxNoOfResults: 10 });
+    const results = products.listAll(client, { maxNoOfResults: 100 });
     resolve(results);
   });
 }
@@ -32,10 +32,10 @@ function create(product) {
   });
 }
 
-function update(id, product) {
+function update(id, productData) {
   //   console.log(product);
   return new Promise((resolve, reject) => {
-    const updatedProduct = products.updateProductById(client, id, product);
+    const updatedProduct = products.updateProductById(client, id, productData);
     resolve(updatedProduct);
   });
 }
