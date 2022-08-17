@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const { getPostData } = require("../utils");
 
 // @desc Gets All Products
 // @routes GET /api/products
@@ -33,10 +34,16 @@ async function getProduct(req, res, id) {
 // @routes POST /api/products/create
 async function createProduct(req, res) {
   try {
+    const body = await getPostData(req);
+
+    const { productName } = JSON.parse(body);
+
     const product = {
-      productName: "Samsung Galaxy A50",
+      productName,
     };
+
     const newProduct = await Product.create(product);
+
     res.writeHead(201, { "Content-type": "application/json" });
     res.end(JSON.stringify(newProduct));
   } catch (error) {

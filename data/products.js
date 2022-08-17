@@ -13,8 +13,8 @@ async function listAll(
   var docs = results;
 
   if (results.length > 0) {
-    console.log(`List of ${maxNoOfResults} products`);
-    console.log(docs);
+    // console.log(`List of ${maxNoOfResults} products`);
+    // console.log(docs);
     return docs;
   } else {
     console.log(`No listing found `);
@@ -26,7 +26,7 @@ async function findProductById(client, id) {
     .db("nodeapi")
     .collection("productsSells")
     .findOne({ _id: parseInt(id) });
-  console.log(typeof parseInt(id));
+  //   console.log(typeof parseInt(id));
 
   if (result) {
     return result;
