@@ -4,6 +4,7 @@ const {
   getProducts,
   getProduct,
   createProduct,
+  updateProduct,
 } = require("./controllers/productController");
 
 server = http.createServer((req, res) => {
@@ -15,7 +16,13 @@ server = http.createServer((req, res) => {
   ) {
     const id = req.url.split("/")[3];
     getProduct(req, res, id);
-  } else if (req.url === "/api/products/create" && req.method === "POST") {
+  } else if (
+    req.url.match(/\/api\/products\/([0-9]+)/) &&
+    req.method === "PUT"
+  ) {
+    const id = req.url.split("/")[3];
+    updateProduct(req, res, id);
+  } else if (req.url === "/api/products" && req.method === "POST") {
     createProduct(req, res);
   } else {
     res.writeHead(404, { "Content-type": "application/json" });

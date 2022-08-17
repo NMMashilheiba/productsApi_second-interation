@@ -32,4 +32,12 @@ function create(product) {
   });
 }
 
-module.exports = { findAll, findById, create };
+function update(id, product) {
+  //   console.log(product);
+  return new Promise((resolve, reject) => {
+    const updatedProduct = products.updateProductById(client, id, product);
+    resolve(updatedProduct);
+  });
+}
+
+module.exports = { findAll, findById, create, update };

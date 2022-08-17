@@ -67,7 +67,27 @@ async function createProduct(client, product) {
     _id: newProduct.insertedId,
     productName: product.productName,
   };
+  //   console.log(typeof newProduct.insertedId);
   return result;
 }
 
-module.exports = { listAll, findProductById, createProduct };
+async function updateProductById(client, productId, productData) {
+  //   console.log(typeof productId);
+  const updatedProduct = await client
+    .db("nodeapi")
+    .collection("productsSells")
+    .updateOne({ _id: parseInt(productId) }, { $set: productData });
+
+  const resultData = {
+    _id: parseInt(productId),
+    productName: productData.productName,
+  };
+  //   console.log(
+  //     `${updatedProduct.matchedCount} documents matched the query criteria`
+  //   );
+  //   console.log(`${updatedProduct.modifiedCount} documents was/were updated`);
+
+  return resultData;
+}
+
+module.exports = { listAll, findProductById, createProduct, updateProductById };
