@@ -25,6 +25,13 @@ function findById(id) {
   });
 }
 
+function findTopProducts() {
+  return new Promise((resolve, reject) => {
+    const product = products.topSellingProducts(client);
+    resolve(product);
+  });
+}
+
 function create(product) {
   //   console.log(product);
   return new Promise((resolve, reject) => {
@@ -34,11 +41,35 @@ function create(product) {
 }
 
 function update(id, productData) {
-  //   console.log(product);
+  //   console.log(typeof id);
   return new Promise((resolve, reject) => {
     const updatedProduct = products.updateProductById(client, id, productData);
     resolve(updatedProduct);
   });
 }
 
-module.exports = { findAll, findById, create, update };
+function removedProduct(id) {
+  console.log(typeof id);
+  return new Promise((resolve, reject) => {
+    const deleteProduct = products.deleteProductById(client, id);
+    resolve({ message: `Product with id ${id} has been deleted.` });
+  });
+}
+
+function todaysRevenue() {
+  //   console.log("todaysRevenue");
+  return new Promise((resolve, reject) => {
+    const product = products.todaysSells(client);
+    resolve(product);
+  });
+}
+
+module.exports = {
+  findAll,
+  findById,
+  create,
+  update,
+  removedProduct,
+  findTopProducts,
+  todaysRevenue,
+};

@@ -20,7 +20,6 @@ async function listAll(
   var docs = results;
 
   if (results.length > 0) {
-    // console.log(`List of ${maxNoOfResults} products`);
     // console.log(docs);
     return docs;
   } else {
@@ -53,7 +52,6 @@ async function getNextSequenceValue(client, sequenceName) {
       { $inc: { sequence_value: 1 } }
     );
   //   console.log(sequenceDocument);
-  //   return sequenceDocument.sequence_value;
 }
 
 async function createProduct(client, product) {
@@ -97,12 +95,99 @@ async function updateProductById(client, productId, productData) {
     productQuantity: productData.productQuantity,
     totalAmount: productData.totalAmount,
   };
-  //   console.log(
-  //     `${updatedProduct.matchedCount} documents matched the query criteria`
-  //   );
-  //   console.log(`${updatedProduct.modifiedCount} documents was/were updated`);
 
   return resultData;
 }
 
-module.exports = { listAll, findProductById, createProduct, updateProductById };
+async function deleteProductById(client, id) {
+  const deletedProduct = await client
+    .db("nodeapi")
+    .collection("productsSells")
+    .deleteOne({ _id: parseInt(id) });
+}
+
+async function topSellingProducts(client) {
+  var res = [];
+  const pipeline = [
+    {
+      $group: {
+        _id: "$productName",
+        quantity: {
+          $sum: "$productQuantity",
+        },
+      },
+    },
+    {
+      $sort: {
+        quantity: -1,
+      },
+    },
+    {
+      $limit: 5,
+    },
+  ];
+
+  const cursor = await client
+    .db("nodeapi")
+    .collection("productsSells")
+    .aggregate(pipeline);
+
+  const docs = await cursor.toArray();
+  //   console.log(docs);
+  return docs;
+}
+
+async function todaysSells(client) {
+  const cursor = await client
+    .db("nodeapi")
+    .collection("productsSells")
+    .find({ date: dateTime });
+
+  const docs = await cursor.toArray();
+  var results = docs;
+
+  //   console.log(docs);
+
+  return results;
+}
+
+// async function todaysRevenue(client, dateTime) {
+//   var res = 0;
+//   const pipeline = [
+//     {
+//       $group: {
+//         _id: "$dateTime",
+//         todayrev: {
+//           $sum: "$amount",
+//         },
+//       },
+//     },
+//   ];
+
+//   const cursor = await client
+//     .db("nodeapi")
+//     .collection("productSalesRecord")
+//     .aggregate(pipeline);
+
+//   const docs = await cursor.toArray();
+//   var results = docs;
+//   //   if (results.length > 0) {
+//   //     results.forEach((result, i) => {
+//   //       if (result._id == dateTime) {
+//   //         res += result.todayrev;
+//   //       }
+//   //     });
+//   //   }
+//   console.log(docs);
+//   //   return res;
+// }
+
+module.exports = {
+  listAll,
+  findProductById,
+  createProduct,
+  updateProductById,
+  deleteProductById,
+  topSellingProducts,
+  todaysSells,
+};
